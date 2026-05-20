@@ -1,422 +1,959 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>BCC Delivery Tracker</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #f5f5f5;
-      font-family: 'Barlow', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0">
+<title>BCC Dispatcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════
+   BCC Dispatcher — production styles
+   Inlined from ../ui_kits/dispatcher/styles.css + colors_and_type.css
+   ════════════════════════════════════════════════════════════ */
 
-    /* ── HEADER ── */
-    header {
-      width: 100%;
-      background: #111;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 4px solid #C41230;
-    }
-    .header-logo {
-      height: 56px;
-      width: auto;
-    }
-    .header-right {
-      text-align: right;
-    }
-    .header-title {
-      font-family: 'Oswald', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #C41230;
-    }
-    .header-sub {
-      font-size: 11px;
-      color: #888;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── MAIN LAYOUT ── */
-    main {
-      width: 100%;
-      max-width: 520px;
-      padding: 32px 20px 80px;
-    }
+html, body {
+  background: #fff; color: #111;
+  font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+}
 
-    /* ── ORDER PILL ── */
-    .order-pill {
-      display: inline-block;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      padding: 4px 14px;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #888;
-      margin-bottom: 20px;
-    }
-    .order-pill b { color: #C41230; font-weight: 700; }
+/* ── PAGE HEADER ── */
+.dx-header { background: #111; border-bottom: 5px solid #cc0000; padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between; }
+.dx-brand { display: flex; align-items: center; gap: 18px; }
+.dx-brand img { height: 52px; width: auto; filter: invert(1); }
+.dx-divider { width: 1px; height: 36px; background: #2c2c2c; }
+.dx-product { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+.dx-product-name { display: block; font-size: 20px; font-weight: 700; letter-spacing: 0.16em; color: #cc0000; }
+.dx-product-sub { display: block; font-size: 11px; letter-spacing: 0.20em; color: #aaa; margin-top: 2px; }
+.dx-user { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #aaa; display: flex; align-items: center; gap: 12px; }
+.dx-user b { color: #fff; font-weight: 600; }
+.dx-avatar { width: 32px; height: 32px; background: #cc0000; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; }
+.dx-signout-btn { background: transparent; border: 1px solid #2c2c2c; color: #aaa;
+  font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; font-weight: 600; padding: 5px 10px; cursor: pointer; }
+.dx-signout-btn:hover { border-color: #cc0000; color: #cc0000; }
 
-    /* ── STATUS ── */
-    .status-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #888;
-      margin-bottom: 6px;
-    }
-    .status-text {
-      font-family: 'Oswald', sans-serif;
-      font-size: 36px;
-      font-weight: 700;
-      line-height: 1.15;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-    .status-text.red    { color: #C41230; }
-    .status-text.green  { color: #2ecc71; }
-    .status-sub {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 24px;
-    }
+/* ── DATE / STAT BAR ── */
+.dx-subbar { display: flex; align-items: stretch; justify-content: flex-start;
+  background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0 28px; }
+.dx-datenav { display: flex; align-items: center; gap: 0; }
+.dx-datenav button { background: #fff; border: 0; width: 36px; height: 64px;
+  cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 18px;
+  color: #888; border-right: 1px solid #e0e0e0; }
+.dx-datenav button:first-child { border-left: 1px solid #e0e0e0; }
+.dx-datenav button:hover { color: #cc0000; background: #fafafa; }
+.dx-date { padding: 0 22px; height: 64px; display: flex; flex-direction: column;
+  justify-content: center; border-right: 1px solid #e0e0e0; min-width: 220px; }
+.dx-date-label { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 0.20em;
+  text-transform: uppercase; color: #888; }
+.dx-date-value { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600;
+  color: #111; margin-top: 1px; }
+.dx-today-btn { width: auto; padding: 0 16px; font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; font-weight: 600; color: #cc0000; }
+.dx-stats { display: flex; align-items: stretch; }
+.dx-stat { padding: 12px 22px; border-left: 1px solid #e0e0e0;
+  display: flex; flex-direction: column; justify-content: center; min-width: 110px; }
+.dx-stat-label { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 0.20em;
+  text-transform: uppercase; color: #888; }
+.dx-stat-value { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 700;
+  color: #111; line-height: 1.1; letter-spacing: -1px; }
+.dx-stat-value.red { color: #cc0000; }
 
-    /* ── ETA BLOCK ── */
-    .eta-block {
-      background: #C41230;
-      padding: 18px 20px;
-      margin-bottom: 20px;
-    }
-    .eta-label {
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 6px;
-    }
-    .eta-time {
-      font-family: 'Oswald', sans-serif;
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .eta-note {
-      font-size: 12px;
-      color: rgba(255,255,255,0.7);
-    }
+/* ── MAIN ── */
+.dx-main { padding: 24px 28px 80px; display: flex; flex-direction: column; gap: 24px;
+  min-height: calc(100vh - 64px - 64px); }
 
-    /* ── INFO CARD ── */
-    .info-card {
-      background: #1e1e1e;
-      border: 1px solid #2a2a2a;
-      padding: 0 18px;
-      margin-bottom: 16px;
-    }
-    .info-card-label {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #888;
-      padding: 12px 0 8px;
-      border-bottom: 1px solid #2a2a2a;
-    }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #2a2a2a;
-    }
-    .info-row:last-child { border-bottom: none; }
-    .info-key {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #666;
-    }
-    .info-val {
-      font-size: 13px;
-      font-weight: 600;
-      color: #f0f0f0;
-      text-align: right;
-      max-width: 60%;
-    }
+/* ── ROUTE BLOCK ── */
+.dx-route { border: 2px solid #111; }
+.dx-route-head { background: #111; color: #fff; padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.dx-route-head-left { display: flex; align-items: baseline; gap: 18px;
+  font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+.dx-route-id { font-size: 18px; font-weight: 700; letter-spacing: 0.10em; color: #fff; }
+.dx-route-id b { color: #cc0000; font-weight: 700; }
+.dx-route-meta { font-size: 12px; letter-spacing: 0.16em; color: #aaa; }
+.dx-route-meta b { color: #fff; font-weight: 600; }
+.dx-route-head-right { display: flex; align-items: center; gap: 18px; min-width: 320px; }
+.dx-route-progress { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.dx-route-progress-meta { display: flex; justify-content: space-between;
+  font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #aaa; }
+.dx-route-bar { height: 4px; background: #2c2c2c; }
+.dx-route-fill { height: 100%; background: #cc0000; transition: width 0.6s ease; }
 
-    /* ── PROGRESS ── */
-    .progress-wrap { margin-bottom: 20px; }
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    .progress-bar { height: 3px; background: #2a2a2a; }
-    .progress-fill { height: 100%; background: #C41230; transition: width 0.7s ease; }
+/* ── STOPS TABLE ── */
+.dx-table { width: 100%; border-collapse: collapse; background: #fff; }
+.dx-table th, .dx-table td { text-align: left; padding: 12px 14px;
+  border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+.dx-table th { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #888; background: #fafafa;
+  padding-top: 9px; padding-bottom: 9px; font-weight: 500; border-bottom: 1px solid #e0e0e0; }
+.dx-table tbody tr { cursor: pointer; }
+.dx-table tbody tr:hover { background: #fafafa; }
+.dx-table tbody tr.selected { background: #fff5f5; }
+.dx-table tbody tr.skipped td { opacity: 0.55; }
+.dx-table tbody tr:last-child td { border-bottom: 0; }
+.dx-seq { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700;
+  color: #cc0000; width: 44px; text-align: center; }
+.dx-order { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 0.10em;
+  font-weight: 600; color: #111; white-space: nowrap; }
+.dx-customer { font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 500; color: #111; }
+.dx-customer-sub { font-family: 'Roboto', sans-serif; font-size: 12px; color: #888; margin-top: 2px; }
 
-    /* ── LOADING / ERROR ── */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      margin-top: 100px;
-    }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid #2a2a2a;
-      border-top-color: #C41230;
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: #666; font-size: 13px; letter-spacing: 0.08em; }
-    .error-state { text-align: center; margin-top: 90px; padding: 0 24px; }
-    .error-code { font-family: 'Oswald', sans-serif; font-size: 72px; color: #2a2a2a; margin-bottom: 12px; }
-    .error-msg { color: #666; font-size: 14px; line-height: 1.7; }
+/* ── ETA / BADGES / SMS ── */
+.dx-eta { display: inline-flex; align-items: center; gap: 8px; font-family: 'Oswald', sans-serif; }
+.dx-eta-window { font-size: 15px; font-weight: 500; color: #111;
+  display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.dx-eta-dash { color: #888; font-size: 12px; }
+.dx-eta-tag { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  font-weight: 600; color: #cc0000; border: 1px solid #cc0000; padding: 1px 5px; }
+.dx-eta-empty { color: #ccc; font-family: 'Oswald', sans-serif; font-size: 14px; }
+.dx-badge { display: inline-block; font-family: 'Oswald', sans-serif;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; font-weight: 600; white-space: nowrap;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.dx-badge.pending  { background: #fff; color: #888; border: 1px solid #ddd; }
+.dx-badge.next     { background: #cc0000; color: #fff; }
+.dx-badge.enroute  { background: #1a6fb5; color: #fff; }
+.dx-badge.complete { background: #111; color: #fff; }
+.dx-badge.skipped  { background: #fff; color: #aaa; border: 1px solid #ddd; text-decoration: line-through; }
+.dx-sms-cell { display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Oswald', sans-serif; font-size: 12px;
+  letter-spacing: 0.14em; text-transform: uppercase; }
+.dx-sms-cell.sent   { color: #111; font-weight: 600; }
+.dx-sms-cell.unsent { color: #aaa; font-weight: 500; }
+.dx-sms-cell.queued { color: #cc0000; font-weight: 600; }
+.dx-sms-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2e8a3e; }
+.dx-sms-cell.queued .dx-sms-dot { background: #cc0000; animation: dx-blink 1.5s ease infinite; }
+@keyframes dx-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.dx-more-btn { background: transparent; border: 0; font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  color: #888; padding: 4px 8px; cursor: pointer; white-space: nowrap; }
+.dx-more-btn:hover { color: #cc0000; }
 
-    /* ── REFRESH BAR ── */
-    .refresh-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: #1a1a1a;
-      border-top: 1px solid #2a2a2a;
-      padding: 11px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #666;
-    }
-    .dot {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #C41230;
-      animation: blink 2s ease infinite;
-      margin-right: 7px;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+/* ── DRAWER ── */
+.dx-drawer-scrim { position: fixed; inset: 0; background: rgba(17,17,17,0.4);
+  z-index: 50; animation: dx-fade-in 0.18s ease both; }
+@keyframes dx-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.dx-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 480px;
+  background: #fff; border-left: 5px solid #cc0000; z-index: 51;
+  display: flex; flex-direction: column; animation: dx-slide 0.22s ease both; overflow-y: auto; }
+@keyframes dx-slide { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.dx-drawer-head { background: #111; color: #fff; padding: 16px 22px;
+  display: flex; align-items: center; justify-content: space-between; }
+.dx-seq-big { font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700;
+  color: #cc0000; line-height: 1; }
+.dx-drawer-titles { flex: 1; margin: 0 16px; min-width: 0; }
+.dx-drawer-title { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600;
+  letter-spacing: 0.10em; text-transform: uppercase; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dx-drawer-order { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.20em;
+  text-transform: uppercase; color: #aaa; margin-top: 4px; }
+.dx-drawer-close { background: transparent; border: 0; color: #aaa;
+  font-family: 'Oswald', sans-serif; font-size: 22px;
+  cursor: pointer; padding: 0 6px; line-height: 1; }
+.dx-drawer-close:hover { color: #cc0000; }
+.dx-drawer-intro { padding: 12px 22px; background: #fff5f5;
+  border-bottom: 1px solid #f5dada; font-family: 'Oswald', sans-serif;
+  font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase;
+  color: #cc0000; font-weight: 600; }
+.dx-drawer-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 20px; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .a1 { animation: fadeUp 0.3s ease 0.05s both; }
-    .a2 { animation: fadeUp 0.3s ease 0.12s both; }
-    .a3 { animation: fadeUp 0.3s ease 0.18s both; }
-    .a4 { animation: fadeUp 0.3s ease 0.24s both; }
-  </style>
+.dx-edit-block { display: flex; flex-direction: column; gap: 10px;
+  padding-bottom: 18px; border-bottom: 1px solid #eee; }
+.dx-edit-label { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: #111; font-weight: 600; }
+.dx-edit-help { font-family: 'Roboto', sans-serif; font-size: 12px; line-height: 1.55; color: #888; }
+.dx-edit-help em { color: #cc0000; font-style: normal; font-weight: 600; }
+
+.dx-input { font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 600;
+  color: #111; padding: 9px 12px; border: 1px solid #111; background: #fff;
+  text-transform: uppercase; letter-spacing: 0.06em; width: 100%; }
+.dx-input:focus { outline: 0; border-color: #cc0000; box-shadow: inset 0 0 0 1px #cc0000; }
+.dx-eta-edit { display: flex; align-items: center; gap: 10px; }
+.dx-eta-edit .dx-input { flex: 1; min-width: 0; }
+.dx-eta-edit-dash { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #888; font-weight: 500; }
+
+.dx-phone-edit { display: flex; align-items: center; gap: 8px; }
+.dx-phone-edit .dx-input-phone { flex: 1; letter-spacing: 0.02em; text-transform: none; }
+
+.dx-status-picker { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0; border: 1px solid #111; }
+.dx-status-btn { background: #fff; border: 0; border-right: 1px solid #111;
+  font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; font-weight: 600; color: #111; padding: 11px 0; cursor: pointer; }
+.dx-status-btn:last-child { border-right: 0; }
+.dx-status-btn:hover { background: #fafafa; color: #cc0000; }
+.dx-status-btn.active { background: #111; color: #fff; }
+.dx-status-btn.active:hover { background: #cc0000; }
+
+.dx-action-btn { background: #fff; border: 1px solid #111; color: #111;
+  font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.16em;
+  text-transform: uppercase; padding: 11px 12px; cursor: pointer; font-weight: 600; text-align: center; }
+.dx-action-btn:hover { background: #111; color: #fff; }
+.dx-action-btn.primary { background: #cc0000; color: #fff; border-color: #cc0000; }
+.dx-action-btn.primary:hover { background: #a30000; border-color: #a30000; }
+.dx-action-btn.full { width: 100%; }
+.dx-action-btn:disabled { background: #f3f3f3; border-color: #ddd; color: #aaa; cursor: not-allowed; }
+.dx-action-btn:disabled:hover { background: #f3f3f3; color: #aaa; }
+
+.dx-readonly-block { padding-top: 4px; display: flex; flex-direction: column; gap: 14px; }
+.dx-field { display: flex; flex-direction: column; gap: 5px; padding-bottom: 12px; border-bottom: 1px solid #eee; }
+.dx-field:last-child { border-bottom: 0; padding-bottom: 0; }
+.dx-field-label { font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: #888; }
+.dx-field-value { font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 500; color: #111; }
+.dx-field-value.mono { font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px; font-weight: 400; color: #555; word-break: break-all; }
+.dx-field-value a { color: #111; }
+.dx-field-value a:hover { color: #cc0000; }
+
+.dx-items-list { display: flex; flex-direction: column; }
+.dx-items-list .dx-item { display: flex; align-items: baseline; gap: 14px;
+  padding: 7px 0; border-bottom: 1px solid #eee; font-size: 13px; }
+.dx-items-list .dx-item:last-child { border-bottom: 0; }
+.dx-items-list .dx-item-qty { font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 18px; color: #cc0000; min-width: 32px; }
+
+.dx-timing { display: inline-block; font-family: 'Oswald', sans-serif;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  font-weight: 700; padding: 3px 8px; }
+.dx-timing.early  { color: #2e8a3e; border: 1px solid #2e8a3e; }
+.dx-timing.ontime { color: #111; border: 1px solid #111; }
+.dx-timing.late   { color: #cc0000; border: 1px solid #cc0000; }
+
+/* ── TOAST ── */
+.dx-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #111; border-top: 3px solid #cc0000; color: #fff;
+  font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 0.20em;
+  text-transform: uppercase; padding: 12px 22px; z-index: 100;
+  animation: dx-toast-in 0.22s ease both; pointer-events: none; }
+@keyframes dx-toast-in { from { transform: translate(-50%, 8px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.dx-toast.error { background: #cc0000; border-top-color: #fff; }
+
+.dx-meta-foot { text-align: center; font-family: 'Oswald', sans-serif; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #aaa; padding: 12px; }
+
+/* ── LOGIN SCREEN ── */
+.dx-login-shell { min-height: 100vh; background: #fff; display: flex; align-items: center;
+  justify-content: center; padding: 40px 20px; }
+.dx-login { width: 100%; max-width: 360px; }
+.dx-login-brand { display: flex; flex-direction: column; align-items: center;
+  gap: 12px; margin-bottom: 32px; }
+.dx-login-brand img { height: 80px; }
+.dx-login-product { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #cc0000; }
+.dx-login-sub { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: #888; }
+.dx-login-form { border: 2px solid #111; background: #fff; }
+.dx-login-form-head { background: #111; color: #fff; padding: 8px 16px;
+  font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.20em;
+  text-transform: uppercase; }
+.dx-login-fields { padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 12px; }
+.dx-login-field { display: flex; flex-direction: column; gap: 5px; }
+.dx-login-field label { font-family: 'Oswald', sans-serif; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: #888; }
+.dx-login-actions { padding: 0 18px 18px; }
+.dx-login-error { color: #cc0000; font-size: 12px; padding: 8px 16px 0;
+  font-family: 'Oswald', sans-serif; letter-spacing: 0.10em;
+  text-transform: uppercase; font-weight: 600; }
+
+/* ── BOOT / LOADING ── */
+.dx-boot { min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px; color: #888; }
+.dx-boot-spinner { width: 38px; height: 38px; border: 3px solid #ddd;
+  border-top-color: #cc0000; border-radius: 50%; animation: dx-spin .75s linear infinite; }
+@keyframes dx-spin { to { transform: rotate(360deg); } }
+.dx-boot-text { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; }
+
+.dx-empty { padding: 80px 24px; text-align: center; color: #888; }
+.dx-empty-code { font-family: 'Oswald', sans-serif; font-size: 80px;
+  color: #ddd; margin-bottom: 12px; }
+.dx-empty-msg { font: 400 14px/1.7 'Roboto'; max-width: 380px; margin: 0 auto; }
+</style>
 </head>
 <body>
-
-<header>
-  <img class="header-logo" src="data:image/jpeg;base64,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" alt="Ben's Contractor Center">
-  <div class="header-right">
-    <div class="header-title">Delivery Tracker</div>
-    <div class="header-sub">Live Order Updates</div>
-  </div>
-</header>
-
-<main>
-  <div id="app">
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">Loading your delivery…</div>
-    </div>
-  </div>
-</main>
-
-<div class="refresh-bar" id="refresh-bar" style="display:none;">
-  <div><span class="dot"></span>Live tracking active</div>
-  <div id="countdown-label">Refreshes in 90s</div>
-</div>
-
+<div id="root"></div>
 <script>
-  const DB = 'https://bccsms-27c55-default-rtdb.firebaseio.com';
 
-  async function fbGet(path) {
-    const res = await fetch(`${DB}/${path}.json`);
-    if (!res.ok) throw new Error(`Firebase ${res.status}`);
-    return res.json();
-  }
+"use strict";
 
-  const token = new URLSearchParams(window.location.search).get('token');
-  let cdTimer, secondsLeft = 90;
+// ── Config ──────────────────────────────────────────────────────────────────
+const DB           = 'https://bccsms-27c55-default-rtdb.firebaseio.com';
+const DISPATCH_PIN = '2025';
+const TRACKER_BASE = 'https://kinggregory82.github.io/bcctracker';
 
-  const fmt = d => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+// ── State ───────────────────────────────────────────────────────────────────
+const S = {
+  authed:      false,
+  routes:      {},
+  queue:       {},
+  dateOffset:  0,
+  selected:    null,   // { routeId, stopId }
+  drawerDirty: false,
+};
+let pollTimer = null;
+let toastTimer = null;
 
-  async function loadDelivery() {
-    try {
-      const tokenData = await fbGet(`tokens/${token}`);
-      if (!tokenData) return showError('Tracking link not found.');
+// ── DB helpers (plain fetch — zero eval) ─────────────────────────────────────
+async function dbGet(path) {
+  const r = await fetch(`${DB}/${path}.json`);
+  if (!r.ok) throw new Error(`DB ${r.status}`);
+  return r.json();
+}
+async function dbPatch(path, data) {
+  const r = await fetch(`${DB}/${path}.json`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!r.ok) throw new Error(`DB ${r.status}`);
+  return r.json();
+}
+async function dbPush(path, data) {
+  const r = await fetch(`${DB}/${path}.json`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!r.ok) throw new Error(`DB ${r.status}`);
+  return r.json();
+}
 
-      const { routeId, stopId } = tokenData;
-      const route = await fbGet(`routes/${routeId}`);
-      if (!route) return showError('Route data not available.');
+// ── Poll ─────────────────────────────────────────────────────────────────────
+async function poll() {
+  try {
+    const [routes, queue] = await Promise.all([dbGet('routes'), dbGet('resend_queue')]);
+    S.routes = routes || {};
+    S.queue  = queue  || {};
+    renderRoutes();
+    renderStats();
+    renderDrawerIfOpen();
+  } catch (e) { toast(e.message, true); }
+}
+function startPolling() {
+  poll();
+  pollTimer = setInterval(poll, 120000);
+}
+function stopPolling() {
+  clearInterval(pollTimer);
+  pollTimer = null;
+}
 
-      const stop = route.stops[stopId];
-      if (!stop) return showError('Stop not found.');
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const ymd   = d => d.toISOString().slice(0, 10);
+const fmtDate = d => d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+const fmtTime = ts => {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  if (isNaN(d)) return '—';
+  return d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+};
+const esc   = s => (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-      const allStops   = Object.values(route.stops);
-      const stopsAhead = allStops.filter(s => s.sequence < stop.sequence && s.status === 'pending').length;
-      const total      = allStops.length;
-      const completed  = allStops.filter(s => s.status === 'complete').length;
+function targetDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + S.dateOffset);
+  return d;
+}
+function dateKey() { return ymd(targetDate()); }
+function isToday()  { return S.dateOffset === 0; }
 
-      // Weighted progress: complete=1, next/skipped=0.5, pending=0
-      const weightedScore = allStops.reduce((sum, s) => {
-        if (s.status === 'complete') return sum + 1;
-        if (s.status === 'next')    return sum + 0.5;
-        return sum;
-      }, 0);
-      const pct = total ? Math.min(100, Math.round((weightedScore / total) * 100)) : 0;
-
-      // ETA — prefer Firebase sources
-      let etaLow, etaHigh, etaNote;
-      if (stop.etaOverridden && stop.customerEta) {
-        const mid = new Date(stop.customerEta);
-        etaLow  = new Date(mid.getTime() - 30 * 60000);
-        etaHigh = new Date(mid.getTime() + 30 * 60000);
-        etaNote = 'Estimated window — updates as route progresses';
-      } else if (stop.arrivalTime || stop.calculatedEta) {
-        const mid = new Date(stop.arrivalTime || stop.calculatedEta);
-        etaLow  = new Date(mid.getTime() - 30 * 60000);
-        etaHigh = new Date(mid.getTime() + 30 * 60000);
-        etaNote = 'Estimated window — updates as route progresses';
-      } else {
-        const avg     = route.avgServiceMinutes || 35;
-        const baseMin = stopsAhead * avg;
-        etaLow  = new Date(Date.now() + Math.max(0, baseMin - 15) * 60000);
-        etaHigh = new Date(Date.now() + (baseMin + 25) * 60000);
-        etaNote = 'Estimated window — updates as route progresses';
+function getRoutes() {
+  const today = new Date().toISOString().slice(0, 10);
+  return Object.entries(S.routes)
+    .filter(([id, r]) => r && r.date === today && id !== 'UNASSIGNED')
+    .map(([id, r]) => ({
+      id, ...r,
+      stops: r.stops
+        ? Object.entries(r.stops)
+            .map(([stopId, s]) => ({ stopId, ...s }))
+            .filter(s => {
+              if (s.status === 'complete') return true;
+              const hasEta = s.arrivalTime || s.calculatedEta || (s.customerEta && s.customerEta.low);
+              const hasStatus = s.deliveryStatus && s.deliveryStatus !== 'Order' && s.deliveryStatus !== 'Scheduled' && s.deliveryStatus !== 'Printed';
+              return hasEta || hasStatus;
+            })
+            .sort((a,b) => {
+              if (a.arrivalTime && b.arrivalTime) return a.arrivalTime.localeCompare(b.arrivalTime);
+              if (a.arrivalTime) return -1;
+              if (b.arrivalTime) return 1;
+              return (a.sequence||0)-(b.sequence||0);
+            })
+        : [],
+    }))
+    .filter(r => r.stops.length > 0)
+    .sort((a,b) => a.id.localeCompare(b.id));
+}
+function queuedStopIds() {
+  const ids = new Set();
+  Object.values(S.queue).forEach(e => e && e.stopId && ids.add(e.stopId));
+  return ids;
+}
+function getStats() {
+  const routes = getRoutes();
+  let stops=0, delivered=0, smsSent=0, onTime=0, early=0, late=0;
+  routes.forEach(r => r.stops.forEach(s => {
+    stops++;
+    if (s.status === 'complete') {
+      delivered++;
+      if (s.deliveryTime) {
+        const scheduled = s.arrivalTime || s.calculatedEta || s.seedEta;
+        if (scheduled) {
+          const deliveredMs = new Date(s.deliveryTime).getTime();
+          const etaLow      = new Date(scheduled).getTime() - 30*60*1000;
+          const etaHigh     = new Date(scheduled).getTime() + 30*60*1000;
+          if (deliveredMs < etaLow)       early++;
+          else if (deliveredMs <= etaHigh) onTime++;
+          else                             late++;
+        }
       }
-
-      render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct });
-    } catch (err) {
-      console.error(err);
-      showError('Connection error — retrying…');
     }
-  }
+    if (s.smsSent && (s.smsSent.at || s.smsSent.departed === true || s.smsSent['0'] || s.smsSent['1'])) smsSent++;
+  }));
+  const eligible = early + onTime + late;
+  const pctOf = n => eligible > 0 ? Math.round((n/eligible)*100) : null;
+  return { routes: routes.length, stops, delivered, smsSent,
+           early, onTime, late, eligible,
+           earlyPct: pctOf(early), onTimePct: pctOf(onTime), latePct: pctOf(late) };
+}
 
-  function render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct }) {
-    const delivered = stop.status === 'complete';
-    const arrived   = !delivered && (stop.deliveryStatus === 'Arrived' || stop.status === 'arrived');
-    const isNext    = !delivered && !arrived && stopsAhead === 0;
+// ── Toast ────────────────────────────────────────────────────────────────────
+function toast(msg, error = false) {
+  const el = document.getElementById('dx-toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'dx-toast' + (error ? ' error' : '');
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2200);
+}
 
-    const orderPill = `<div class="order-pill a1">Order <b>${stop.orderNumber || '—'}</b></div>`;
+// ── PIN screen ───────────────────────────────────────────────────────────────
+function renderPin() {
+  document.getElementById('root').innerHTML = `
+    <div class="dx-login-shell">
+      <div class="dx-login">
+        <div class="dx-login-brand">
+          <span class="dx-login-product">BCC Dispatch</span>
+          <span class="dx-login-sub">Dispatcher access only</span>
+        </div>
+        <div class="dx-login-form">
+          <div class="dx-login-form-head">Enter PIN</div>
+          <div class="dx-login-fields">
+            <div class="dx-login-field">
+              <label for="dx-pin">PIN</label>
+              <input id="dx-pin" class="dx-input" type="password"
+                inputmode="numeric" placeholder="••••" autocomplete="off">
+            </div>
+          </div>
+          <div id="dx-pin-err" class="dx-login-error" style="display:none"></div>
+          <div class="dx-login-actions">
+            <button id="dx-pin-btn" class="dx-action-btn primary full">Enter</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
 
-    // ── STATUS ──
-    let statusHTML;
-    if (delivered) {
-      const ts = stop.completedAt ? fmt(new Date(stop.completedAt)) : '';
-      statusHTML = `<div class="a1">
-        <div class="status-label">Status</div>
-        <div class="status-text green">Your delivery<br>is complete ✓</div>
-        ${ts ? `<div class="status-sub">Completed at ${ts}</div>` : ''}
-      </div>`;
-    } else if (arrived) {
-      statusHTML = `<div class="a1">
-        <div class="status-label">Status</div>
-        <div class="status-text green">Your delivery<br>has arrived</div>
-        <div class="status-sub">Driver is on site</div>
-      </div>`;
-    } else if (isNext) {
-      statusHTML = `<div class="a1">
-        <div class="status-label">Status</div>
-        <div class="status-text red">Your delivery<br>is on the way</div>
-        <div class="status-sub">Next stop — driver heading to you now</div>
-      </div>`;
+  const input = document.getElementById('dx-pin');
+  const errEl = document.getElementById('dx-pin-err');
+  input.focus();
+
+  function checkPin() {
+    if (input.value === DISPATCH_PIN) {
+      S.authed = true;
+      renderApp();
+      startPolling();
     } else {
-      statusHTML = `<div class="a1">
-        <div class="status-label">Status</div>
-        <div class="status-text red">Your delivery<br>is on the way</div>
-        <div class="status-sub">Your delivery is on the way</div>
+      errEl.textContent = 'Incorrect PIN';
+      errEl.style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('dx-pin-btn').onclick = checkPin;
+  input.onkeydown = e => { if (e.key === 'Enter') checkPin(); };
+}
+
+// ── Main app shell ───────────────────────────────────────────────────────────
+function renderApp() {
+  document.getElementById('root').innerHTML = `
+    <header class="dx-header">
+      <div class="dx-brand">
+        <img src="data:image/jpeg;base64,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" alt="BCC" style="height:48px;width:auto;filter:invert(1);mix-blend-mode:screen;">
+        <div class="dx-divider"></div>
+        <div class="dx-product">
+          <span class="dx-product-name">Dispatch</span>
+          <span class="dx-product-sub">Tracking interface</span>
+        </div>
+      </div>
+      <div class="dx-user">
+        <span>BCC <b>Dispatcher</b></span>
+        <span class="dx-avatar">D</span>
+        <button class="dx-signout-btn" id="dx-lock-btn">Lock</button>
+      </div>
+    </header>
+
+    <div class="dx-subbar">
+      <div class="dx-stats" id="dx-stats"></div>
+    </div>
+
+    <main class="dx-main" id="dx-routes"></main>
+
+    <div id="dx-drawer-wrap" style="display:none"></div>
+    <div id="dx-toast" class="dx-toast" style="display:none"></div>`;
+
+  document.getElementById('dx-lock-btn').onclick = () => {
+    stopPolling();
+    S.authed = false;
+    S.selected = null;
+    renderPin();
+  };
+  document.addEventListener('keydown', onEsc);
+  renderStats();
+  renderRoutes();
+}
+
+function onEsc(e) {
+  if (e.key === 'Escape' && S.selected) {
+    S.selected = null;
+    document.getElementById('dx-drawer-wrap').style.display = 'none';
+    document.getElementById('dx-drawer-wrap').innerHTML = '';
+  }
+}
+
+// ── Stats bar ────────────────────────────────────────────────────────────────
+function renderStats() {
+  const el = document.getElementById('dx-stats');
+  if (!el) return;
+  const s = getStats();
+  const fmt = pct => pct !== null ? pct + '%' : '—';
+  el.innerHTML = `
+    <div class="dx-stat"><span class="dx-stat-label">Routes</span><span class="dx-stat-value">${s.routes}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">Stops</span><span class="dx-stat-value">${s.stops}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">Delivered</span><span class="dx-stat-value">${s.delivered}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">SMS Sent</span><span class="dx-stat-value red">${s.smsSent}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">Early</span><span class="dx-stat-value" style="color:#2e8a3e">${fmt(s.earlyPct)}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">On Time</span><span class="dx-stat-value">${fmt(s.onTimePct)}</span></div>
+    <div class="dx-stat"><span class="dx-stat-label">Late</span><span class="dx-stat-value${s.latePct !== null && s.latePct > 20 ? ' red' : ''}">${fmt(s.latePct)}</span></div>`;
+}
+
+// ── Route blocks ─────────────────────────────────────────────────────────────
+function renderRoutes() {
+  const el = document.getElementById('dx-routes');
+  if (!el) return;
+  const routes = getRoutes();
+  const queued = queuedStopIds();
+  const sel = S.selected;
+
+  if (routes.length === 0) {
+    el.innerHTML = `
+      <div class="dx-empty">
+        <div class="dx-empty-code">&#8709;</div>
+        <div class="dx-empty-msg">No routes for ${esc(fmtDate(targetDate()))}.<br>
+          ${isToday() ? 'The poller will seed routes when DQ has them.' : 'Pick another day with the arrows above.'}
+        </div>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = routes.map(r => routeBlockHTML(r, queued, sel)).join('') +
+    '<div class="dx-meta-foot">Live &mdash; Firebase REST &middot; polls every 2 min</div>';
+
+  // Attach click handlers to all Edit buttons and rows
+  el.querySelectorAll('[data-stop]').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const { route, stop } = btn.dataset;
+      S.selected = { routeId: route, stopId: stop };
+      renderDrawer();
+    };
+  });
+}
+
+function routeBlockHTML(r, queued, sel) {
+  const completed = r.stops.filter(s => s.status === 'complete').length;
+  const total = r.stops.length;
+  const pct = total ? Math.round(completed/total*100) : 0;
+  return `
+    <section class="dx-route">
+      <div class="dx-route-head">
+        <div class="dx-route-head-left">
+          <span class="dx-route-id">Route <b>${esc(r.id)}</b></span>
+          <span class="dx-route-meta">
+            ${r.driverName ? `Driver <b>${esc(r.driverName)}</b> &middot; ` : ''}Unit <b>${esc(r.assetDescription || r.asset||'—')}</b>
+            ${r.startedAt ? ` &middot; Started <b>${esc(r.startedAt)}</b>` : ''}
+          </span>
+        </div>
+        <div class="dx-route-head-right">
+          <div class="dx-route-progress">
+            <div class="dx-route-progress-meta">
+              <span>Progress</span><span>${completed} of ${total} stops done</span>
+            </div>
+            <div class="dx-route-bar"><div class="dx-route-fill" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+      </div>
+      <table class="dx-table">
+        <colgroup>
+          <col style="width:44px">
+          <col style="width:140px">
+          <col>
+          <col style="width:160px">
+          <col style="width:220px">
+          <col style="width:90px">
+          <col style="width:110px">
+          <col style="width:60px">
+        </colgroup>
+        <thead><tr>
+          <th>#</th><th>Order</th><th>Customer</th>
+          <th>Customer ETA</th><th>Status</th><th>Timing</th><th>SMS</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${r.stops.map(s => stopRowHTML(r.id, s, queued.has(s.stopId), sel && sel.routeId===r.id && sel.stopId===s.stopId)).join('')}
+        </tbody>
+      </table>
+    </section>`;
+}
+
+function stopRowHTML(routeId, s, isQueued, isSelected) {
+  const cls = ['dx-row', s.status||'', isSelected?'selected':'', s.status==='skipped'?'skipped':''].join(' ');
+  return `
+    <tr class="${esc(cls)}" data-stop="${esc(s.stopId)}" data-route="${esc(routeId)}">
+      <td class="dx-seq">${s.sequence||''}</td>
+      <td class="dx-order">${esc(s.orderNumber||'')}</td>
+      <td>
+        <div class="dx-customer">${esc(s.customerName||'')}</div>
+        <div class="dx-customer-sub">${esc(s.address||'')}</div>
+      </td>
+      <td>${etaCellHTML(s.customerEta, s.etaOverridden, s.arrivalTime, s.calculatedEta)}</td>
+      <td>${statusBadgeHTML(s.status, s.completedAt, s.deliveryStatus)}</td>
+      <td>${timingBadgeHTML(getDeliveryTiming(s))}</td>
+      <td>${smsCellHTML(s.smsSent, isQueued)}</td>
+      <td><button class="dx-more-btn" data-stop="${esc(s.stopId)}" data-route="${esc(routeId)}">Edit ›</button></td>
+    </tr>`;
+}
+
+function etaCellHTML(eta, overridden, arrivalTime, calculatedEta) {
+  // Prefer manual customerEta override
+  if (eta && eta.low && eta.low !== '—') {
+    return `<div class="dx-eta">
+      <span class="dx-eta-window">
+        <span>${esc(eta.low)}</span>
+        <span class="dx-eta-dash">&ndash;</span>
+        <span>${esc(eta.high||'')}</span>
+      </span>
+      ${overridden ? '<span class="dx-eta-tag">Manual</span>' : ''}
+    </div>`;
+  }
+  // Use arrivalTime or calculatedEta from poller — whichever is available
+  const etaSource = arrivalTime || calculatedEta;
+  if (etaSource) {
+    const d = new Date(etaSource);
+    if (!isNaN(d)) {
+      const low  = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+      const high = new Date(d.getTime() + 30*60000).toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+      return `<div class="dx-eta">
+        <span class="dx-eta-window">
+          <span>${low}</span>
+          <span class="dx-eta-dash">&ndash;</span>
+          <span>${high}</span>
+        </span>
       </div>`;
     }
-
-    // ── ETA ──
-    let etaHTML = '';
-    if (!delivered && !arrived) {
-      const isActual = !!stop.arrivalTime;
-      etaHTML = `<div class="eta-block a2">
-        <div class="eta-label">Estimated Arrival</div>
-        <div class="eta-time">${fmt(etaLow)} – ${fmt(etaHigh)}</div>
-        <div class="eta-note">${etaNote}</div>
-      </div>`;
-    }
-
-    // ── PROGRESS ──
-    const progressHTML = `<div class="progress-wrap a3">
-      <div class="progress-header">
-        <span>Route Progress</span>
-        <span>Delivery progress</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-    </div>`;
-
-    // ── INFO ──
-    const driverName = route.driverName ? route.driverName.split(' ')[0] : '—';
-    const infoHTML = `<div class="info-card a4">
-      <div class="info-card-label">Delivery Info</div>
-      <div class="info-row">
-        <span class="info-key">Truck</span>
-        <span class="info-val">${route.assetDescription || ('Unit ' + (route.asset || '—'))}</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Address</span>
-        <span class="info-val">${stop.address || '—'}</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Order #</span>
-        <span class="info-val">${stop.orderNumber || '—'}</span>
-      </div>
-    </div>`;
-
-    document.getElementById('app').innerHTML = orderPill + statusHTML + etaHTML + progressHTML + infoHTML;
-    document.getElementById('refresh-bar').style.display = delivered ? 'none' : 'flex';
   }
+  return '<span class="dx-eta-empty">&mdash;</span>';
+}
 
-  function showError(msg) {
-    document.getElementById('app').innerHTML = `<div class="error-state">
-      <div class="error-code">?</div>
-      <div class="error-msg">${msg}<br><br>Contact your sales rep if the problem continues.</div>
-    </div>`;
+function statusBadgeHTML(status, completedAt, deliveryStatus) {
+  const ts = completedAt ? fmtTime(completedAt) : '—';
+  if (status === 'complete') {
+    const ds = (deliveryStatus || '').toLowerCase();
+    let label = 'Delivered';
+    if (ds.includes('no/sig') || ds.includes('no sig')) label = 'Delivered No/Sig';
+    else if (ds.includes('w/sig') || ds.includes('with sig')) label = 'Delivered W/Sig';
+    else if (ds.includes('partial')) label = 'Partial';
+    else if (ds === 'not delivered') label = 'Not Delivered';
+    else if (ds === 'delivery complete') label = 'Complete';
+    return `<span class="dx-badge complete">${label} &middot; ${esc(ts)}</span>`;
   }
+  if (deliveryStatus) {
+    const ds = deliveryStatus.toLowerCase();
+    if (ds === 'next stop')        return `<span class="dx-badge next">Next Stop</span>`;
+    if (ds === 'arrived')          return `<span class="dx-badge next">Arrived</span>`;
+    if (ds === 'enroute')          return `<span class="dx-badge enroute">En Route</span>`;
+    if (ds === 'ready to depart')  return `<span class="dx-badge enroute">Ready</span>`;
+    if (ds === 'job not ready')    return `<span class="dx-badge skipped">Not Ready</span>`;
+    if (ds === 'returning')        return `<span class="dx-badge skipped">Returning</span>`;
+    if (ds === 'delivery w/issue') return `<span class="dx-badge skipped">Issue</span>`;
+    if (ds === 'cancelled')        return `<span class="dx-badge skipped">Cancelled</span>`;
+  }
+  if (status === 'next')    return `<span class="dx-badge next">Next</span>`;
+  if (status === 'skipped') return `<span class="dx-badge skipped">Skipped</span>`;
+  return `<span class="dx-badge pending">Pending</span>`;
+}
 
-  function startCountdown() {
-    secondsLeft = 90;
-    clearInterval(cdTimer);
-    cdTimer = setInterval(() => {
-      const el = document.getElementById('countdown-label');
-      if (el) el.textContent = `Refreshes in ${--secondsLeft}s`;
-      if (secondsLeft <= 0) secondsLeft = 90;
-    }, 1000);
+function smsCellHTML(sms, queued) {
+  if (queued) return `<span class="dx-sms-cell queued"><span class="dx-sms-dot"></span>Queued</span>`;
+  if (sms && sms.at) {
+    const at = typeof sms.at === 'number' ? fmtTime(sms.at) : sms.at;
+    return `<span class="dx-sms-cell sent"><span class="dx-sms-dot"></span>${esc(at)}</span>`;
   }
+  if (sms && (sms.departed === true || sms['0'] || sms['1'] || sms['3'])) {
+    return `<span class="dx-sms-cell sent"><span class="dx-sms-dot"></span>Sent</span>`;
+  }
+  return `<span class="dx-sms-cell unsent">Not sent</span>`;
+}
 
-  if (!token) {
-    showError('No tracking token in URL.');
-  } else {
-    loadDelivery();
-    startCountdown();
-    setInterval(() => { loadDelivery(); startCountdown(); }, 90000);
+// ── Stop Drawer ───────────────────────────────────────────────────────────────
+function timingBadgeHTML(timing) {
+  if (!timing) return '<span style="color:#ccc;font-family:\'Oswald\',sans-serif;font-size:11px">—</span>';
+  if (timing === 'early')  return '<span class="dx-timing early">Early</span>';
+  if (timing === 'ontime') return '<span class="dx-timing ontime">On Time</span>';
+  if (timing === 'late')   return '<span class="dx-timing late">Late</span>';
+  return '';
+}
+
+function getDeliveryTiming(s) {
+  if (s.status !== 'complete' || !s.deliveryTime) return null;
+  // Use the same anchor the ETA display uses — arrivalTime first, then calculatedEta, then seedEta
+  // This ensures timing matches what was shown to the dispatcher
+  const scheduled = s.arrivalTime || s.calculatedEta || s.seedEta;
+  if (!scheduled) return null;
+  const deliveredMs = new Date(s.deliveryTime).getTime();
+  const etaLow      = new Date(scheduled).getTime() - 30*60*1000;
+  const etaHigh     = new Date(scheduled).getTime() + 30*60*1000;
+  if (deliveredMs < etaLow)    return 'early';
+  if (deliveredMs <= etaHigh)  return 'ontime';
+  return 'late';
+}
+
+// ── Stop Drawer ───────────────────────────────────────────────────────────────
+function getSelectedStop() {
+  if (!S.selected) return { route: null, stop: null };
+  const route = getRoutes().find(r => r.id === S.selected.routeId);
+  const stop  = route ? route.stops.find(s => s.stopId === S.selected.stopId) : null;
+  return { route, stop };
+}
+
+function renderDrawer() {
+  const wrap = document.getElementById('dx-drawer-wrap');
+  if (!wrap) return;
+  const { route, stop } = getSelectedStop();
+  if (!stop) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+
+  const queued = queuedStopIds().has(stop.stopId);
+  const url    = `${TRACKER_BASE}/?token=${esc(stop.token||'')}`;
+  const eta    = stop.customerEta || { low: '', high: '' };
+
+  wrap.style.display = 'block';
+  wrap.innerHTML = `
+    <div class="dx-drawer-scrim" id="dx-scrim"></div>
+    <aside class="dx-drawer" role="dialog">
+      <div class="dx-drawer-head">
+        <div class="dx-seq-big">${stop.sequence||''}</div>
+        <div class="dx-drawer-titles">
+          <div class="dx-drawer-title">${esc(stop.customerName||'')}</div>
+          <div class="dx-drawer-order">${esc(stop.orderNumber||'')} &middot; Route ${esc(route.id)} &middot; Unit ${esc(route.asset||'—')}</div>
+        </div>
+        <button class="dx-drawer-close" id="dx-drawer-close">&times;</button>
+      </div>
+      <div class="dx-drawer-intro">Edit what the customer sees on their tracker</div>
+      <div class="dx-drawer-body">
+
+        <!-- ETA -->
+        <div class="dx-edit-block">
+          <div class="dx-edit-label">Customer ETA Window</div>
+          <div class="dx-eta-edit">
+            <input class="dx-input" id="dx-eta-low" value="${esc(eta.low||'')}" placeholder="1:30 PM">
+            <span class="dx-eta-edit-dash">to</span>
+            <input class="dx-input" id="dx-eta-high" value="${esc(eta.high||'')}" placeholder="2:15 PM">
+          </div>
+          <div class="dx-edit-help">
+            Shown on the customer tracking page.
+            ${stop.etaOverridden ? 'Currently overriding the auto-computed window.' : 'Type to override the auto-computed window.'}
+          </div>
+          <button class="dx-action-btn primary full" id="dx-save-eta">Save ETA</button>
+        </div>
+
+        <!-- Status -->
+        <div class="dx-edit-block">
+          <div class="dx-edit-label">Stop Status</div>
+          <div class="dx-status-picker">
+            ${['pending','next','complete','skipped'].map(s =>
+              `<button class="dx-status-btn${stop.status===s?' active':''}" data-status="${s}">${s}</button>`
+            ).join('')}
+          </div>
+          <div class="dx-edit-help">Drives the headline on the customer tracker.</div>
+        </div>
+
+        <!-- SMS -->
+        <div class="dx-edit-block">
+          <div class="dx-edit-label">Tracking SMS</div>
+          <div class="dx-phone-edit">
+            <input type="tel" class="dx-input dx-input-phone" id="dx-phone"
+              value="${esc(stop.phone||'')}" placeholder="+19895551234">
+            <button class="dx-action-btn" id="dx-save-phone">Save Phone</button>
+          </div>
+          <div style="margin-top:6px">
+            ${queued
+              ? '<span class="dx-sms-cell queued"><span class="dx-sms-dot"></span>Queued &mdash; sends on next poll</span>'
+              : stop.smsSent && stop.smsSent.at
+                ? `<span class="dx-sms-cell sent"><span class="dx-sms-dot"></span>Sent at ${typeof stop.smsSent.at==='number' ? esc(fmtTime(stop.smsSent.at)) : esc(stop.smsSent.at)}</span>`
+                : stop.smsSent && stop.smsSent.departed === true
+                  ? '<span class="dx-sms-cell sent"><span class="dx-sms-dot"></span>Sent</span>'
+                  : '<span class="dx-sms-cell unsent">Not yet sent &mdash; will fire on next poll</span>'
+            }
+          </div>
+          <button class="dx-action-btn" id="dx-resend-btn" ${queued ? 'disabled' : ''}>
+            ${queued ? 'Queued ✓' : (stop.smsSent && (stop.smsSent.at || stop.smsSent.departed === true)) ? 'Resend Tracking Link' : 'Send Now'}
+          </button>
+          <div class="dx-edit-help">SMS sends once when the route departs. Up to 2-minute delay.</div>
+        </div>
+
+        <!-- Read-only fields -->
+        <div class="dx-readonly-block">
+          <div class="dx-field">
+            <span class="dx-field-label">Delivery Address</span>
+            <span class="dx-field-value">${esc(stop.address||'—')}</span>
+          </div>
+          <div class="dx-field">
+            <span class="dx-field-label">Tracking URL</span>
+            <span class="dx-field-value mono"><a href="${url}" target="_blank">${url}</a></span>
+          </div>
+          ${stop.items && stop.items.length ? `
+          <div class="dx-field">
+            <span class="dx-field-label">Items</span>
+            <div class="dx-items-list">
+              ${stop.items.map(it => `<div class="dx-item"><span class="dx-item-qty">${esc(String(it.qty||''))}</span><span>${esc(it.description||'')}</span></div>`).join('')}
+            </div>
+          </div>` : ''}
+        </div>
+      </div>
+    </aside>`;
+
+  // Events
+  document.getElementById('dx-scrim').onclick       = closeDrawer;
+  document.getElementById('dx-drawer-close').onclick = closeDrawer;
+
+  document.getElementById('dx-save-eta').onclick = async () => {
+    const low  = document.getElementById('dx-eta-low').value.trim() || '—';
+    const high = document.getElementById('dx-eta-high').value.trim() || '—';
+    const oldEta = stop.customerEta ? `${stop.customerEta.low||'—'} – ${stop.customerEta.high||'—'}` : '—';
+    try {
+      await dbPatch(`routes/${S.selected.routeId}/stops/${S.selected.stopId}`,
+        { customerEta: { low, high }, etaOverridden: true });
+      await logHistory({
+        field: 'customerEta',
+        oldValue: oldEta,
+        newValue: `${low} – ${high}`,
+        route, stop,
+      });
+      toast('CUSTOMER ETA UPDATED');
+    } catch(e) { toast(e.message, true); }
+  };
+
+  wrap.querySelectorAll('.dx-status-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const next  = btn.dataset.status;
+      const patch = { status: next };
+      if (next === 'complete') patch.completedAt = new Date().toISOString();
+      else patch.completedAt = null;
+      try {
+        await dbPatch(`routes/${S.selected.routeId}/stops/${S.selected.stopId}`, patch);
+        await logHistory({
+          field: 'status',
+          oldValue: stop.status || 'pending',
+          newValue: next,
+          route, stop,
+        });
+        const labels = { pending:'PENDING', next:'MARKED NEXT', complete:'MARKED COMPLETE', skipped:'MARKED SKIPPED' };
+        toast(labels[next] || 'STATUS UPDATED');
+      } catch(e) { toast(e.message, true); }
+    };
+  });
+
+  document.getElementById('dx-save-phone').onclick = async () => {
+    const phone = document.getElementById('dx-phone').value.trim();
+    try {
+      await dbPatch(`routes/${S.selected.routeId}/stops/${S.selected.stopId}`, { phone });
+      await logHistory({
+        field: 'phone',
+        oldValue: stop.phone || '—',
+        newValue: phone,
+        route, stop,
+      });
+      toast('PHONE NUMBER UPDATED');
+    } catch(e) { toast(e.message, true); }
+  };
+
+  document.getElementById('dx-resend-btn').onclick = async () => {
+    try {
+      await dbPush('resend_queue', {
+        routeId:     S.selected.routeId,
+        stopId:      S.selected.stopId,
+        requestedAt: Date.now(),
+        requestedBy: 'dispatcher',
+      });
+      await logHistory({
+        field: 'smsSent',
+        oldValue: '—',
+        newValue: 'resend queued',
+        route, stop,
+      });
+      toast('SMS QUEUED — SENDS ON NEXT POLL');
+    } catch(e) { toast(e.message, true); }
+  };
+}
+
+// ── History logging ───────────────────────────────────────────────────────────
+async function logHistory({ field, oldValue, newValue, route, stop }) {
+  const dk = dateKey();
+  try {
+    await dbPush(`history/${dk}`, {
+      changedAt:    Date.now(),
+      changedBy:    'dispatcher',
+      routeId:      route.id,
+      asset:        route.asset || '—',
+      driverName:   route.driverName || '—',
+      stopId:       stop.stopId,
+      orderNumber:  stop.orderNumber || '—',
+      customerName: stop.customerName || '—',
+      address:      stop.address || '—',
+      field,
+      oldValue:     String(oldValue),
+      newValue:     String(newValue),
+    });
+  } catch(e) {
+    console.warn('History log failed:', e.message);
   }
+}
+
+function renderDrawerIfOpen() {
+  if (S.selected && document.getElementById('dx-drawer-wrap') &&
+      document.getElementById('dx-drawer-wrap').style.display !== 'none') {
+    renderDrawer();
+  }
+}
+
+function closeDrawer() {
+  S.selected = null;
+  const wrap = document.getElementById('dx-drawer-wrap');
+  if (wrap) { wrap.style.display = 'none'; wrap.innerHTML = ''; }
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+renderPin();
+
 </script>
 </body>
 </html>
