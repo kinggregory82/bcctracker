@@ -379,6 +379,15 @@
 
     // ── INFO ──
     const driverName = route.driverName ? route.driverName.split(' ')[0] : '—';
+    const pics = (stop.pictures || []).concat(stop.signatures || []);
+    const photoHTML = pics.length > 0 ? `
+      <div class="info-row">
+        <span class="info-key">Delivery Photos</span>
+        <span class="info-val">
+          ${pics.map((url, i) => `<a href="${url}" target="_blank" rel="noopener" style="color:#C41230;font-weight:700;margin-left:${i>0?'8px':'0'}">Photo ${i+1}</a>`).join('')}
+        </span>
+      </div>` : '';
+
     const infoHTML = `<div class="info-card a4">
       <div class="info-card-label">Delivery Info</div>
       <div class="info-row">
@@ -393,6 +402,7 @@
         <span class="info-key">Order #</span>
         <span class="info-val">${stop.orderNumber || '—'}</span>
       </div>
+      ${photoHTML}
     </div>`;
 
     document.getElementById('app').innerHTML = orderPill + statusHTML + etaHTML + progressHTML + infoHTML;
