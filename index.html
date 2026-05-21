@@ -322,15 +322,23 @@
   }
 
   function render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct }) {
-    const delivered = stop.status === 'complete';
-    const arrived   = !delivered && (stop.deliveryStatus === 'Arrived' || stop.status === 'arrived');
-    const isNext    = !delivered && !arrived && stopsAhead === 0;
+    const todayYMD    = new Date().toISOString().slice(0, 10);
+    const isTomorrow  = route.date && route.date > todayYMD;
+    const delivered   = stop.status === 'complete';
+    const arrived     = !delivered && (stop.deliveryStatus === 'Arrived' || stop.status === 'arrived');
+    const isNext      = !delivered && !arrived && stopsAhead === 0;
 
     const orderPill = `<div class="order-pill a1">Order <b>${stop.orderNumber || '—'}</b></div>`;
 
     // ── STATUS ──
     let statusHTML;
-    if (delivered) {
+    if (isTomorrow && !delivered) {
+      statusHTML = `<div class="a1">
+        <div class="status-label">Status</div>
+        <div class="status-text" style="color:#aaa">Your delivery<br>is scheduled</div>
+        <div class="status-sub">Scheduled for tomorrow — estimated window below</div>
+      </div>`;
+    } else if (delivered) {
       const ts = stop.completedAt ? fmt(new Date(stop.completedAt)) : '';
       statusHTML = `<div class="a1">
         <div class="status-label">Status</div>
