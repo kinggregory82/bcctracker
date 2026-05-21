@@ -280,13 +280,19 @@
       const total      = allStops.length;
       const completed  = allStops.filter(s => s.status === 'complete').length;
 
-      // Weighted progress: complete=1, next/skipped=0.5, pending=0
-      const weightedScore = allStops.reduce((sum, s) => {
-        if (s.status === 'complete') return sum + 1;
-        if (s.status === 'next')    return sum + 0.5;
-        return sum;
-      }, 0);
-      const pct = total ? Math.min(100, Math.round((weightedScore / total) * 100)) : 0;
+      // Progress based on this stop's position in the route
+      // Base = completed stops ahead / total stops
+      // Bumped by status of this specific stop
+      let pct;
+      if (stop.status === 'complete') {
+        pct = 100;
+      } else {
+        const base = total > 0 ? (completed / total) : 0;
+        const ds   = (stop.deliveryStatus || '').toLowerCase();
+        const bump = ds === 'arrived'   ? 0.75 / total :
+                     ds === 'next stop' ? 0.5  / total : 0;
+        pct = Math.min(99, Math.round((base + bump) * 100));
+      }
 
       // ETA — prefer Firebase sources
       let etaLow, etaHigh, etaNote;
@@ -365,8 +371,8 @@
     // ── PROGRESS ──
     const progressHTML = `<div class="progress-wrap a3">
       <div class="progress-header">
-        <span>Route Progress</span>
-        <span>Delivery progress</span>
+        <span>Delivery Progress</span>
+        <span>${pct}%</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     </div>`;
