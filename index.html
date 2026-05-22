@@ -311,10 +311,37 @@
 
       // ETA — prefer Firebase sources
       let etaLow, etaHigh, etaNote;
+
+      // Parse a time string like "930AM", "9:30 AM", or ISO timestamp
+      function parseEtaStr(s) {
+        if (!s) return null;
+        // Try ISO first
+        const d = new Date(s);
+        if (!isNaN(d)) return d;
+        // Try "930AM" or "9:30AM" style
+        const m = s.replace(/\s/g,'').match(/^(\d{1,2}):?(\d{2})(AM|PM)$/i);
+        if (!m) return null;
+        let h = parseInt(m[1]), min = parseInt(m[2]);
+        const pm = m[3].toUpperCase() === 'PM';
+        if (pm && h !== 12) h += 12;
+        if (!pm && h === 12) h = 0;
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, min, 0);
+      }
+
       if (stop.etaOverridden && stop.customerEta) {
-        const mid = new Date(stop.customerEta);
-        etaLow  = new Date(mid.getTime() - 30 * 60000);
-        etaHigh = new Date(mid.getTime() + 30 * 60000);
+        const eta = stop.customerEta;
+        if (eta.low) {
+          // Object format from Edit drawer: { low: "930AM", high: "1030AM" }
+          etaLow  = parseEtaStr(eta.low);
+          etaHigh = parseEtaStr(eta.high || eta.low);
+          if (etaHigh && etaLow && etaHigh <= etaLow) etaHigh = new Date(etaLow.getTime() + 30*60000);
+        } else {
+          // Legacy: single ISO string
+          const mid = new Date(eta);
+          etaLow  = new Date(mid.getTime() - 30 * 60000);
+          etaHigh = new Date(mid.getTime() + 30 * 60000);
+        }
         etaNote = 'Estimated window — updates as route progresses';
       } else if (stop.arrivalTime || stop.calculatedEta) {
         const mid = new Date(stop.arrivalTime || stop.calculatedEta);
