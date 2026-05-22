@@ -278,10 +278,11 @@
       const allStops   = Object.values(route.stops);
       const stopsAhead = allStops.filter(s => s.sequence < stop.sequence && s.status === 'pending').length;
       const total      = allStops.length;
-      const completed  = allStops.filter(s => s.status === 'complete').length;
+      const mySeq      = stop.sequence || 0;
+      const completed  = allStops.filter(s => s.status === 'complete' && (s.sequence || 0) < mySeq).length;
 
       // Progress based on this stop's position in the route
-      // Base = completed stops ahead / total stops
+      // Base = stops completed ahead of this one / total stops
       // Bumped by status of this specific stop
       let pct;
       if (stop.status === 'complete') {
