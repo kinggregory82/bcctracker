@@ -226,21 +226,11 @@
     // ── ETA — hide if window has passed and not overridden ──
     let etaHTML = '';
     if (!delivered && !arrived) {
-      const now = Date.now();
-      const etaStale = !stop.etaOverridden && etaHigh && etaHigh.getTime() < now;
-      if (etaStale) {
-        etaHTML = `<div class="eta-block stale a2">
-          <div class="eta-label">Estimated Arrival</div>
-          <div class="eta-time updating">ETA Updating…</div>
-          <div class="eta-note">Route in progress — window will update shortly</div>
-        </div>`;
-      } else {
-        etaHTML = `<div class="eta-block a2">
-          <div class="eta-label">Estimated Arrival</div>
-          <div class="eta-time">${fmt(etaLow)} – ${fmt(etaHigh)}</div>
-          <div class="eta-note">${etaNote}</div>
-        </div>`;
-      }
+      etaHTML = `<div class="eta-block a2">
+        <div class="eta-label">Estimated Arrival</div>
+        <div class="eta-time">${fmt(etaLow)} – ${fmt(etaHigh)}</div>
+        <div class="eta-note">${etaNote}</div>
+      </div>`;
     }
 
     const progressHTML = `<div class="progress-wrap a3">
