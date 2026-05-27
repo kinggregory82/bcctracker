@@ -255,7 +255,7 @@
       <div class="info-card-label">Delivery Info</div>
       <div class="info-row">
         <span class="info-key">Truck</span>
-        <span class="info-val">${route.assetDescription || ('Unit ' + (route.asset || '—'))}</span>
+        <span class="info-val">${[route.asset, route.assetDescription].filter(Boolean).join(' ') || '—'}</span>
       </div>
       <div class="info-row">
         <span class="info-key">Address</span>
