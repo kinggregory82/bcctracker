@@ -501,8 +501,8 @@
           etaHigh = new Date(mid.getTime() + 30 * 60000);
         }
         etaNote = 'Estimated window — updates as route progresses';
-      } else if (stop.arrivalTime || stop.calculatedEta) {
-        const mid = new Date(stop.arrivalTime || stop.calculatedEta);
+      } else if (stop.seedEta || stop.calculatedEta) {
+        const mid = new Date(stop.seedEta || stop.calculatedEta);
         etaLow  = new Date(mid.getTime() - 30 * 60000);
         etaHigh = new Date(mid.getTime() + 30 * 60000);
         etaNote = 'Estimated window — updates as route progresses';
