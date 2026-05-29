@@ -457,7 +457,7 @@
       if (!stop) return showError('Stop not found.');
 
       const allStops   = Object.values(route.stops);
-      const stopsAhead = allStops.filter(s => s.sequence < stop.sequence && s.status === 'pending' && s.status !== 'skipped').length;
+      const stopsAhead = allStops.filter(s => s.sequence < stop.sequence && s.status !== 'complete' && s.status !== 'skipped').length;
       const total      = allStops.filter(s => s.status !== 'skipped').length;
       const mySeq      = stop.sequence || 0;
       const completed  = allStops.filter(s => s.status === 'complete' && (s.sequence || 0) < mySeq).length;
