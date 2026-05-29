@@ -514,6 +514,13 @@
         etaNote = 'Estimated window — updates as route progresses';
       }
 
+      // If ETA window is entirely in the past, widen it forward from now
+      if (etaHigh && etaHigh < new Date()) {
+        const avg = route.avgServiceMinutes || 35;
+        etaLow  = new Date();
+        etaHigh = new Date(Date.now() + avg * 60000);
+        etaNote = 'Arrival expected soon — window updated';
+      }
       render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct });
     } catch (err) {
       console.error(err);
