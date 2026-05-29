@@ -458,6 +458,25 @@
 
       const allStops   = Object.values(route.stops);
       const stopsAhead = allStops.filter(s => s.sequence < stop.sequence && s.status !== 'complete' && s.status !== 'skipped').length;
+
+      // GPS data from poller
+      const gpsLat    = route.gpsLat;
+      const gpsLon    = route.gpsLon;
+      const gpsSpeed  = route.gpsSpeed || 0;
+      const gpsStatus = route.gpsStatus || 'PARKED';
+      const gpsAge    = route.gpsUpdatedAt ? (Date.now() - new Date(route.gpsUpdatedAt).getTime()) / 60000 : 999;
+      const hasLiveGps = gpsLat && gpsLon && gpsAge < 10;
+
+      // Miles from truck to this stop
+      let milesAway = null;
+      if (hasLiveGps && stop.coords && stop.coords.length === 2 && stop.status !== 'complete') {
+        const toRad = d => d * Math.PI / 180;
+        const dLat = toRad(stop.coords[0] - gpsLat);
+        const dLon = toRad(stop.coords[1] - gpsLon);
+        const a = Math.sin(dLat/2)**2 + Math.cos(toRad(gpsLat)) * Math.cos(toRad(stop.coords[0])) * Math.sin(dLon/2)**2;
+        const miles = 3958.8 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        if (miles >= 0.1) milesAway = miles < 10 ? miles.toFixed(1) : Math.round(miles);
+      }
       const total      = allStops.filter(s => s.status !== 'skipped').length;
       const mySeq      = stop.sequence || 0;
       const completed  = allStops.filter(s => s.status === 'complete' && (s.sequence || 0) < mySeq).length;
@@ -521,14 +540,14 @@
         etaHigh = new Date(Date.now() + avg * 60000);
         etaNote = 'Arrival expected soon — window updated';
       }
-      render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct });
+      render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct, gpsSpeed, gpsStatus, milesAway, hasLiveGps });
     } catch (err) {
       console.error(err);
       showError('Connection error — retrying…');
     }
   }
 
-  function render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct }) {
+  function render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct, gpsSpeed, gpsStatus, milesAway, hasLiveGps }) {
     const todayYMD    = new Date().toISOString().slice(0, 10);
     const isTomorrow  = route.date && route.date > todayYMD;
     const delivered   = stop.status === 'complete';
@@ -558,16 +577,20 @@
         <div class="status-sub">Driver is on site</div>
       </div>`;
     } else if (isNext) {
+      const speedSub = milesAway
+        ? `Next stop — approximately ${milesAway} miles away`
+        : 'Next stop — driver heading to you now';
       statusHTML = `<div class="a1">
         <div class="status-label">Status</div>
         <div class="status-text red">Your delivery<br>is on the way</div>
-        <div class="status-sub">Next stop — driver heading to you now</div>
+        <div class="status-sub">${speedSub}</div>
       </div>`;
     } else {
+      const milesStr = milesAway ? `Approximately ${milesAway} miles away` : 'Your delivery is on the way';
       statusHTML = `<div class="a1">
         <div class="status-label">Status</div>
         <div class="status-text red">Your delivery<br>is on the way</div>
-        <div class="status-sub">Your delivery is on the way</div>
+        <div class="status-sub">${milesStr}</div>
       </div>`;
     }
 
