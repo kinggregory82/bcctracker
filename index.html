@@ -6,6 +6,8 @@
   <title>BCC Delivery Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -404,6 +406,18 @@
     .bcc-lb-counter { font-size:13px; color:#aaa; min-width:60px; text-align:center; }
     .bcc-lb-close { position:absolute; top:16px; right:20px; color:#aaa; font-size:28px; cursor:pointer; line-height:1; background:none; border:none; }
     .bcc-lb-close:hover { color:#fff; }
+  #mini-map-wrap {
+    width: 100%; height: 200px; border-radius: 12px; overflow: hidden;
+    margin-bottom: 14px; position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  #mini-map { width: 100%; height: 100%; }
+  #mini-map-label {
+    position: absolute; bottom: 8px; left: 8px; z-index: 5;
+    background: rgba(0,0,0,.7); border-radius: 6px; padding: 4px 10px;
+    font-size: 11px; color: #ccc; font-family: 'Barlow', sans-serif;
+    backdrop-filter: blur(4px);
+  }
   </style>
 </head>
 <body>
@@ -432,6 +446,7 @@
 
 <script>
   const DB = 'https://bccsms-27c55-default-rtdb.firebaseio.com';
+  const MAPBOX_TOKEN = 'pk.eyJ1IjoiYmVuc2dyZWF0b3V0ZG9vcnMiLCJhIjoiY21wbzBqdmh4MDB6ZjJybzhjNnhrdHphdyJ9.ppB9r_WJZwwT6u0lSO0xpw';
 
   async function fbGet(path) {
     const res = await fetch(`${DB}/${path}.json`);
@@ -547,6 +562,55 @@
     }
   }
 
+  let miniMap = null;
+
+  function initMiniMap(truckCoords, stopCoords) {
+    // truckCoords: {lat, lng} or null — live GPS position
+    // stopCoords: {lat, lng} or null — delivery address from spatialData
+    if (!truckCoords && !stopCoords) return;
+
+    // Clean up any existing map
+    if (miniMap) { miniMap.remove(); miniMap = null; }
+
+    const center = truckCoords || stopCoords;
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    miniMap = new mapboxgl.Map({
+      container: 'mini-map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [center.lng, center.lat],
+      zoom: 11,
+      interactive: false,
+      attributionControl: false,
+    });
+
+    miniMap.on('load', () => {
+      // Truck marker — moving truck label
+      if (truckCoords) {
+        const truckEl = document.createElement('div');
+        truckEl.style.cssText = 'font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;color:#ff4444;text-shadow:0 0 4px #000,1px 1px 0 #000,-1px -1px 0 #000;white-space:nowrap;cursor:default';
+        truckEl.textContent = '🚛';
+        new mapboxgl.Marker({ element: truckEl, anchor: 'center' })
+          .setLngLat([truckCoords.lng, truckCoords.lat])
+          .addTo(miniMap);
+      }
+
+      // Delivery address pin
+      if (stopCoords) {
+        new mapboxgl.Marker({ color: '#C41230', scale: 0.8 })
+          .setLngLat([stopCoords.lng, stopCoords.lat])
+          .addTo(miniMap);
+      }
+
+      // Fit both markers if both exist
+      if (truckCoords && stopCoords) {
+        const bounds = new mapboxgl.LngLatBounds()
+          .extend([truckCoords.lng, truckCoords.lat])
+          .extend([stopCoords.lng, stopCoords.lat]);
+        miniMap.fitBounds(bounds, { padding: 50, maxZoom: 13, duration: 0 });
+      }
+    });
+  }
+
   function render({ route, stop, stopsAhead, etaLow, etaHigh, etaNote, completed, total, pct, gpsSpeed, gpsStatus, milesAway, hasLiveGps }) {
     const todayYMD    = new Date().toISOString().slice(0, 10);
     const isTomorrow  = route.date && route.date > todayYMD;
@@ -639,8 +703,28 @@
       ${photoHTML}
     </div>`;
 
-    document.getElementById('app').innerHTML = orderPill + statusHTML + etaHTML + progressHTML + infoHTML;
+    // Mini-map — show when not delivered, have GPS or stop coords
+    const stopCoords = stop.coords && stop.coords.length === 2
+      ? { lat: stop.coords[0], lng: stop.coords[1] } : null;
+    const truckCoordsForMap = hasLiveGps && !delivered
+      ? { lat: route.gpsLat, lng: route.gpsLon } : null;
+    const showMap = !delivered && (truckCoordsForMap || stopCoords);
+    const mapLabel = truckCoordsForMap
+      ? (milesAway ? `Driver is approx. ${milesAway} miles away` : 'Live truck location')
+      : 'Delivery address';
+    const mapHTML = showMap
+      ? `<div id="mini-map-wrap" class="a2b"><div id="mini-map"></div><div id="mini-map-label">${mapLabel}</div></div>`
+      : '';
+
+    document.getElementById('app').innerHTML = orderPill + statusHTML + mapHTML + etaHTML + progressHTML + infoHTML;
     document.getElementById('refresh-bar').style.display = delivered ? 'none' : 'flex';
+
+    // Init map after DOM is ready
+    if (showMap) {
+      requestAnimationFrame(() => initMiniMap(truckCoordsForMap, stopCoords));
+    } else if (miniMap) {
+      miniMap.remove(); miniMap = null;
+    }
   }
 
   function showError(msg) {
